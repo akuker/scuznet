@@ -67,14 +67,59 @@ Pin
 | -------------- | --------- | ---------- | ---------- |
 |3.3v|Pin 1|Pin 2|VCC|
 |Ground|Pin 9|Pin 6|GND|
-|MISO (GPIO09)|Pin 21|Pin 1|MISO|
+|~~MISO (GPIO09)|Pin 21|Pin 1|MISO~~|
 |MOSI (GPIO10)|Pin 19|Pin 4|MOSI|
-|SCLK (GPIO11)|Pin 23|Pin 3|SCK|
+|~~SCLK (GPIO11)|Pin 23|Pin 3|SCK~~|
 |GPIO25|Pin 22|Pin 5|RST|
 
 For the Scuznet: use the 6-pin AVR pinout
-<img src=https://telecnatron.com/reference/pinouts/avr-isp/avr-isp-pinout-345x.png/>
+<a href="https://telecnatron.com/reference/pinouts/avr-isp/avr-isp-pinout-345x.png"><img src="https://telecnatron.com/reference/pinouts/avr-isp/avr-isp-pinout-345x.png"/></a>
 
+Setup the AVR configuration - /usr/local/etc/avrdude.conf
+```
+programmer
+  id = "linuxspi";
+  desc = "Use Linux SPI device in /dev/spidev*";
+  type = "linuxspi";
+  reset = 25;
+;
+```
+
+Example output: http://kevincuzner.com/2013/05/27/raspberry-pi-as-an-avr-programmer/
+```
+kcuzner@tiny-tim:~/avrdude/avrdude$ sudo avrdude -c linuxspi -p m48 -P /dev/spidev0.0 -U flash:w:../blink.hex 
+[sudo] password for kcuzner: 
+
+avrdude: AVR device initialized and ready to accept instructions
+
+Reading | ################################################## | 100% 0.00s
+
+avrdude: Device signature = 0x1e9205
+avrdude: NOTE: "flash" memory has been specified, an erase cycle will be performed
+         To disable this feature, specify the -D option.
+avrdude: erasing chip
+avrdude: reading input file "../blink.hex"
+avrdude: input file ../blink.hex auto detected as Intel Hex
+avrdude: writing flash (2282 bytes):
+
+Writing | ################################################## | 100% 0.75s
+
+avrdude: 2282 bytes of flash written
+avrdude: verifying flash memory against ../blink.hex:
+avrdude: load data flash data from input file ../blink.hex:
+avrdude: input file ../blink.hex auto detected as Intel Hex
+avrdude: input file ../blink.hex contains 2282 bytes
+avrdude: reading on-chip flash data:
+
+Reading | ################################################## | 100% 0.56s
+
+avrdude: verifying ...
+avrdude: 2282 bytes of flash verified
+
+avrdude: safemode: Fuses OK
+
+avrdude done.  Thank you.
+```
 
 # License
 

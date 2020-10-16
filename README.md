@@ -37,6 +37,45 @@ which for the most part has similar limitations.
 See [SETTINGS.html](SETTINGS.html) for a description of firmware configuration
 options.
 
+# Firmware programming
+The firmware can be programmed with a Raspberry Pi or other avrdude-compatible programmer. The following instructions are for a Raspberry Pi, running Raspberry Pi OS (formerly Raspbian)
+
+1. Install necessary packages and checkout scuznet code
+```
+sudo apt install avrdude avr-libc binutils-avr gcc-avr
+cd ~
+git clone https://github.com/saybur/scuznet.git
+```
+2. If necessary, update the microcontroller device you're using:
+```
+pi@rascsi-dev:~/scuznet $ more Makefile 
+PROGRAMMER := avrispv2
+MCU := atxmega128a3u  ## UPDATE THIS LINE
+F_CPU := 32000000
+OPTIONS := -DHW_V01 -DDEBUGGING
+```
+3. Compile the software
+```
+make all
+```
+4. Connect the following signals from your Raspberry Pi to the programming header on the scuzznet.
+----
+Pin 
+
+2
+| Raspberry Pi Signal | Raspberry Pi Pin | Scuznet Pin | Scuznet Signal |
+| -------------- | --------- | ---------- | ---------- |
+|3.3v|Pin 1|Pin 2|VCC|
+|Ground|Pin 9|Pin 6|GND|
+|MISO (GPIO09)|Pin 21|Pin 1|MISO|
+|MOSI (GPIO10)|Pin 19|Pin 4|MOSI|
+|SCLK (GPIO11)|Pin 23|Pin 3|SCK|
+|GPIO25|Pin 22|Pin 5|RST|
+
+For the Scuznet: use the 6-pin AVR pinout
+<img src=https://telecnatron.com/reference/pinouts/avr-isp/avr-isp-pinout-345x.png/>
+
+
 # License
 
 Except where otherwise noted, all files in this repository are available under
